@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>TnT &raquo; Muy Pronto!</title>
+	<meta name="author" content="Alvaro Trigo Lopez" />
+	<meta name="description" content="fullPage looping demo." />
+	<meta name="keywords"  content="TnT, tnt, tool and talent, webdesign, audiovisual" />
+	<meta name="Resource-type" content="Document" />
+
+
+	<link rel="stylesheet" type="text/css" href="assets/css/jquery.fullPage.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/examples.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/tnt.css" />
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+
+	<script type="text/javascript" src="assets/js/jquery.fullPage.js"></script>
+	<script type="text/javascript" src="assets/js/examples.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#fullpage').fullpage({
+				sectionsColor: ['rgba(27, 188, 155, 0.95)', 'rgba(75, 191, 195, 0.95)', 'rgba(123, 170, 190, 0.95)'],
+				anchors: ['home', 'our_services', 'contact_us'],
+				menu: '#menu',
+				loopTop: true,
+				loopBottom: true
+			});
+		});
+	</script>
+</head>
+<body>
+	<div id="container">
+		<ul id="menu">
+			<li data-menuanchor="home" class="active"><a href="#home">TnT</a></li>
+			<li data-menuanchor="our_services"><a href="#our_services">Nuestros Servicios</a></li>
+			<li data-menuanchor="contact_us"><a href="#contact_us">Cont&aacute;ctenos</a></li>
+		</ul>
+
+		<div id="fullpage">
+			<div class="section " id="section0">
+				<div class="content">
+					<h1>Tools and Talent</h1>
+					<p>Agencia de Servicios (Producciones audiovisuales <br />y Programaci&oacute;n Web/Desktop)</p>
+					<img src="assets/css/imgs/undersConstruction.png" alt="fullPage" />
+				</div>
+			</div>
+			<div class="section" id="section1">
+				<div class="content">
+					<h1>Nuestros Servicios</h1>
+					<p>Somos un equipo multidisciplinario, formado por jovenes entusiastas especialistas en las áreas de producci&oacute;n audiovisual, multimedia, diseño Web y desarrolladora de software a la medida para empresas.</p>
+					<div>
+						<div class="product">
+							<p class="title">Desarrollo Software</p>
+							<ul>
+								<li>Programaci&oacute;n de sitios y aplicaciones Web</li>
+								<li>Hosting</li>
+								<li>Aplicaciones de Escritorio</li>
+								<li>Mantenimiento y actualizaci&oacute;n</li>
+							</ul>
+						</div>
+						<div class="product">
+							<p class="title">Producci&oacute;n Audiovisual</p>
+							<ul>
+								<li>Edici&oacute;n y postproducci&oacute;n de audio y video</li>
+								<li>Video y fotograf&iacute;a para eventos</li>
+								<li>Video corporativo</li>
+								<li>Animaci&oacute;n digital 2D</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="section" id="section2">
+				<div class="content">
+					<h1>Comun&iacute;quese con nosotros</h1>
+
+					<p>Env&iacute;enos un correo y consulte sobre nuestros servicios.</p>
+
+					<div class="contact-wrap">
+						<form role="form" id="multiform" action="methods.php" method="POST" enctype="multipart/form-data">
+							<div class="form-group">
+								 <input type="text" required_it id="username" name="username" placeholder="Nombre"/>
+							</div>
+
+							<div class="form-group">
+								 <input type="text" required_it id="email" name="email" placeholder="Correo Electr&oacute;nico"/>
+								 <input type="hidden" id="action" name="action" value="email_send_function">
+							</div>
+
+							<div class="form-group">
+								 <input type="text" id="cellphone" name="cellphone" required_it placeholder="Tel&eacute;fono Celular"/>
+							</div>
+
+							<div class="form-group divComments">
+								 <textarea rows="3" id="comment" name="comment" required_it="" placeholder="Consulta..."></textarea>
+							</div>
+
+							<button type="submit" class="btn btn-default">Enviar</button>
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+
+<script>
+$(function() {
+	$("#multiform").submit(function(e)
+	{
+		if (!validation_required_fields() || !validateEmail() || !validatePhone($('input[name=cellphone]'))){
+			return false;
+		}
+
+	    var formObj = $(this);
+	    var formURL = formObj.attr("action");
+
+		var formData = {
+			'username': $('input[name=username]').val(),
+			'email': $('input[name=email]').val(),
+			'cellphone': $('input[name=cellphone]').val(),
+			'comment': $('textarea[name=comment]').val(),
+			'action': $('input[name=action]').val()
+		};
+
+	    $.ajax({
+	        url: formURL,
+	    type: 'POST',
+	    data:  formData,
+	    mimeType:"multipart/form-data",
+	    dataType 	: 'json',
+  		async:false,
+	    success: function(data)
+	    {
+	    	if(data.indexOf("Success Service") >= 0){
+	 			$('#multiform input:not(#action)').val('');
+	 			$('#multiform textarea').val('');
+	 			alert('El correo ha sido enviado.');
+	    	}
+	 		else{
+	 			alert('Surgió un error en el envio.');
+	 		}
+	    },
+	     error: function(data) 
+	     {
+	     	if(data.responseText.indexOf("Success Service") >= 0){
+	 			$('#multiform input:not(#action)').val('');
+	 			$('#multiform textarea').val('');
+	     		alert('El correo ha sido enviado.');
+	     	}
+	     	else
+	 			alert('Surgió un error en el envio.');
+	     }          
+	    });
+	    e.preventDefault(); //Prevent Default action. 
+	   // e.unbind();
+	}); 
+
+	$('#multiform [required_it]').blur(function(){
+		if ($.trim( $(this).val() ) != ''){
+			$(this).removeClass('has-error');
+		}
+	})
+
+	$('input[name=email]').blur(function(){
+		if ($.trim( $(this).val() ) != ''){
+			$(this).removeClass('has-error');
+		}
+	})	
+
+	$('input[name=cellphone]').blur(function(){
+		if ($.trim( $(this).val() ) != '' &&  $(this).val().length == 8){
+			$(this).val($(this).val().slice(0,4) +'-'+ $(this).val().slice(4,8));
+			$(this).removeClass('has-error');
+		}
+	})
+
+	$('input[name=cellphone]').focus(function() {
+		$(this).val($(this).val().replace('-',''));
+	});
+
+	$('input[name=cellphone]').keypress(function (e) {
+     //if the letter is not digit then display error and don't type anything
+     	if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57) ) {
+            return false;
+    	}else if($(this).val().length == 8){
+    		return false;
+    	}else if($(this).length == 7){
+  			$(this).removeClass('has-error');
+			//$('p#cellphone_error').css('display', 'none');
+    	}
+   });
+
+
+	function validation_required_fields(){
+		result = true;
+		$('#multiform [required_it]').each(function(index){
+			if ($.trim( $(this).val() ) == ''){
+				result = false;
+				$(this).addClass('has-error');
+			}
+		})
+		return result;
+	} 
+
+	function validateEmail() {
+		email = $('input[name=email]').val();
+		var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+		if( !emailReg.test( email ) ) {
+			$('input[name=email]').addClass('has-error');
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function validatePhone(phoneSelector) {
+		var telReg = phoneSelector.val();
+		if( telReg.length == 9 || telReg.length == 0) {
+			return true;
+		} else {
+			phoneSelector.addClass('has-error');
+			return false;
+		}
+	}
+
+});
+</script>
+
+</html>
